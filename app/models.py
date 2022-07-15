@@ -1,7 +1,10 @@
+from datetime import datetime
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 # Create your models here.
 import secrets
+
+from pytz import timezone
 
 PROFILE_CHOICES = (
     (1, 'Admin'),
@@ -30,3 +33,11 @@ class Account(models.Model):
     balance = models.DecimalField(decimal_places = 2,max_digits=10,default=0)
     account_state = models.CharField(max_length=10,default="active")
     last_transaction_timestamp = models.DateTimeField(blank=True,null=True)
+
+class Transaction(models.Model):
+    made_by = models.ForeignKey(User,on_delete=models.CASCADE,related_name="transactions")
+    transaction_type = models.CharField(max_length=20)
+    transaction_timestamp = models.DateTimeField(default=datetime.now)
+    beneficiary_name = models.CharField(max_length=200)
+    sender_name = models.CharField(max_length=200)
+    amount = models.DecimalField(decimal_places = 2,max_digits=10,default=0)

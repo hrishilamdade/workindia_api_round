@@ -79,6 +79,44 @@ class AccountView(GenericAPIView):
         return Response(data,status=status.HTTP_200_OK)
 
 
+class TransactionView(GenericAPIView):
+    serializer_class = TransactionSerializer
+    queryset = Transaction.objects.all()
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (JWTTokenUserAuthentication,)
+
+
+    def get(self,request):
+        username = request.GET.get("username")
+        start_date = request.GET.get("start_date")
+        end_date = request.GET.get("end_date")
+        sort = request.GET.get("sort")
+
+        user = User.objects.get(username=username)
+
+        transactions = self.serializer_class(user.transactions,many=True).data
+
+        print(transactions)
+
+        return Response(transactions)
+
+
+    def post(self,request):
+        data = request.data
+        beneficiary_name = data["beneficiary_name"]
+        amount = data["amount"]
+        transaction_type = data["type"]
+
+        user = User.objects.get(id = self.request.user)
+        transaction = Transaction.objects.create(user = user,transaction_type=transaction_type,beneficiary_name=beneficiary_name,sender_name=user.first_name+user.last_name,amount=amount)
+        transaction.save()
+        
+        print(user)
+
+        return Response({"adad":"eafwe"})
+
+
+
 class AddMoney(GenericAPIView):
     serializer_class = AccountSerializer
     queryset = Account.objects.all()
@@ -87,4 +125,7 @@ class AddMoney(GenericAPIView):
 
 
     def post(self,request):
-        pass
+        data = request.data
+        account_no = data["account_no"]
+        amount = data["amount"]
+        transaction_mode = data["transaction_mode"]

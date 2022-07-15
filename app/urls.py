@@ -3,6 +3,7 @@ from .views import *
 urlpatterns = [
     path('admin/bankaccount', UserRegistrationView.as_view(),name = "user_registration"),
     path('account/login',MyTokenObtainPairView.as_view(), name='login'),
-    path('account/balance/<slug:account_no>',AccountView.as_view(),name="_balace")
+    path('account/balance/<slug:account_no>',AccountView.as_view(),name="_balace"),
+    path('accounts/transactions',TransactionView.as_view(),name= "transactions"),
     # re_path(r'^api/model/'
 ]
