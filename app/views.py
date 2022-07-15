@@ -93,8 +93,8 @@ class TransactionView(GenericAPIView):
         sort = request.GET.get("sort")
 
         user = User.objects.get(username=username)
-
-        transactions = self.serializer_class(user.transactions,many=True).data
+        transactions_filtered = user.transactions.filter(transaction_timestamp__range=(start_date,end_date))
+        transactions = self.serializer_class(transactions_filtered,many=True).data
 
         print(transactions)
 
@@ -106,14 +106,18 @@ class TransactionView(GenericAPIView):
         beneficiary_name = data["beneficiary_name"]
         amount = data["amount"]
         transaction_type = data["type"]
-
-        user = User.objects.get(id = self.request.user)
-        transaction = Transaction.objects.create(user = user,transaction_type=transaction_type,beneficiary_name=beneficiary_name,sender_name=user.first_name+user.last_name,amount=amount)
+        print(data)
+        user = User.objects.get(id = self.request.user.id)
+        print(user)
+        transaction = Transaction.objects.create(made_by = user,transaction_type=transaction_type,beneficiary_name=beneficiary_name,sender_name=user.first_name+" "+user.last_name,amount=amount)
         transaction.save()
         
-        print(user)
-
-        return Response({"adad":"eafwe"})
+        
+        resp = {
+                'status': 'Transaction happened successfully',
+                'status_code': 200
+        }
+        return Response(resp)
 
 
 

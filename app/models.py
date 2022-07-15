@@ -37,7 +37,7 @@ class Account(models.Model):
 class Transaction(models.Model):
     made_by = models.ForeignKey(User,on_delete=models.CASCADE,related_name="transactions")
     transaction_type = models.CharField(max_length=20)
-    transaction_timestamp = models.DateTimeField(default=datetime.now)
+    transaction_timestamp = models.DateTimeField(auto_now_add=True)
     beneficiary_name = models.CharField(max_length=200)
     sender_name = models.CharField(max_length=200)
     amount = models.DecimalField(decimal_places = 2,max_digits=10,default=0)

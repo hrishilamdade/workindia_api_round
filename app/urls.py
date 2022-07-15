@@ -5,5 +5,6 @@ urlpatterns = [
     path('account/login',MyTokenObtainPairView.as_view(), name='login'),
     path('account/balance/<slug:account_no>',AccountView.as_view(),name="_balace"),
     path('accounts/transactions',TransactionView.as_view(),name= "transactions"),
+    path('account/transaction/transfer',TransactionView.as_view(),name = "transfer")
     # re_path(r'^api/model/'
 ]
